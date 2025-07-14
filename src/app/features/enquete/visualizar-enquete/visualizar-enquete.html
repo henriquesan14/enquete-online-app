@@ -1,0 +1,51 @@
+@if (enquete) {
+  <nz-card [nzBordered]="true">
+    @if (viewResultado) {
+      @for (opcao of enquete.opcoes; track opcao.id) {
+        <div class="voto-opcao">
+          <div class="opcao-info">
+            <span>{{ opcao.quantidadeVotos }} votos ({{ opcao.porcentagem }}%)</span>
+          </div>
+          <nz-progress [nzPercent]="opcao.porcentagem" [nzStrokeColor]="'#1890ff'"></nz-progress>
+        </div>
+      }
+      <div class="botao-votar mt-3">
+        <button
+          nz-button
+          nzType="primary"
+          [disabled]="!opcaoSelecionadaId"
+          (click)="votarNovamente()"
+        >
+          Votar novamente
+        </button>
+      </div>
+    } @else {
+      <nz-radio-group [(ngModel)]="opcaoSelecionadaId" class="voto-radio-group">
+        @for (opcao of enquete.opcoes; track opcao.id) {
+          <label nz-radio [nzValue]="opcao.id">
+            {{ opcao.descricao }}
+          </label>
+        }
+      </nz-radio-group>
+
+      <div class="botao-votar mt-3">
+        <button
+          class="me-1"
+          nz-button
+          nzType="primary"
+          [disabled]="!opcaoSelecionadaId"
+          (click)="votar()"
+        >
+          Votar
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          (click)="verResultado()"
+        >
+          Ver resultado
+        </button>
+      </div>
+    }
+  </nz-card>
+}

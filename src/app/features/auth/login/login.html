@@ -1,0 +1,15 @@
+<div class="login-container">
+  <nz-card class="login-card">
+    <div class="login-header">
+      <h2 class="login-title">Enquete online</h2>
+    </div>
+      <button type="button" [nzSize]="'large'" (click)="loginWithGoogle()" nz-button class="login-form-button login-form-margin google-btn" [nzType]="'default'">
+        Entrar com google
+        <span nz-icon nzType="google"></span>
+      </button>
+      <button type="button" [nzSize]="'large'" (click)="loginWithFacebook()" nz-button class="login-form-button login-form-margin facebook-btn" [nzType]="'default'">
+        Entrar com facebook
+        <span nz-icon nzType="facebook"></span>
+      </button>
+  </nz-card>
+</div>

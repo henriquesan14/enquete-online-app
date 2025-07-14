@@ -1,0 +1,15 @@
+.encerramento {
+  margin: 8px 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.voto-opcao {
+  margin-top: 12px;
+}
+
+.opcao-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}

@@ -1,0 +1,45 @@
+<nz-layout>
+      <nz-header>
+        <div class="app-header">
+
+          
+          <div class="header-title">
+            <h3>
+              Enquetes Online
+            </h3>
+          </div>
+
+          <div class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu" nzTrigger="click">
+            <span class="user-info">
+              <img [src]="avatar" alt="avatar" class="avatar" />
+              <span class="username">{{nomeUsuario}}</span>
+              <i nz-icon nzType="down"></i>
+            </span>
+          </div>
+      
+          <nz-dropdown-menu #userMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item (click)="goToProfile()">
+                <i nz-icon nzType="setting" class="me-1"></i>
+                Atualizar perfil
+              </li>
+              <li nz-menu-item (click)="logout()" [nzDisabled]="isLoggingOut">
+                @if(!isLoggingOut){
+                  <i nz-icon nzType="logout" class="me-1"></i>
+                }@else{
+                  <span class="me-1" style="display: inline-block; vertical-align: middle;">
+                    <nz-spin [nzSize]="'small'"></nz-spin>
+                  </span>
+                }
+                Sair
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>

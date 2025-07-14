@@ -1,0 +1,29 @@
+<div class="enquete-card">
+    <nz-card [nzTitle]="enquete.titulo" [nzBordered]="true">
+        <p>{{ enquete.descricao }}</p>
+
+        <div class="encerramento">
+            <span class="text-muted">
+                Encerra em: {{ enquete.encerramento | date: 'dd/MM/yyyy HH:mm' }}
+            </span>
+        </div>
+
+        @for (opcao of enquete.opcoes; track opcao.id) {
+        <div class="voto-opcao">
+            <div class="opcao-info">
+                <strong>{{ opcao.descricao }}</strong>
+                <span>{{ opcao.quantidadeVotos }} votos</span>
+            </div>
+            <nz-progress [nzPercent]="opcao.porcentagem" [nzStrokeColor]="'#1890ff'"></nz-progress>
+        </div>
+        }
+        <div class="botao-visualizar mt-2">
+            <button nz-button [nzType]="'primary'" class="me-1" (click)="visualizar()">
+                Acompanhar em tempo real
+            </button>
+            <button [isOwner]="enquete.createdBy" class="mt-1" (click)="excluir()" nz-button [nzType]="'primary'" [nzDanger]="true" >
+                <i nz-tooltip="Excluir" nz-icon nzType="delete"></i>
+            </button>
+        </div>
+    </nz-card>
+</div>

@@ -1,0 +1,82 @@
+<form [formGroup]="form" (ngSubmit)="salvar()" nz-form [nzLayout]="'vertical'">
+  <!-- Título -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Título</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="titulo" placeholder="Digite o título da enquete" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Descrição -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Descrição</nz-form-label>
+    <nz-form-control>
+      <textarea
+        nz-input
+        formControlName="descricao"
+        rows="2"
+        placeholder="Descrição da enquete"
+      ></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Data de encerramento -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Data de encerramento</nz-form-label>
+    <nz-form-control>
+      <input nz-input type="datetime-local" formControlName="encerramento" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Opções -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Opções</nz-form-label>
+    <nz-form-control>
+      <div formArrayName="opcoes">
+        @for (opcao of opcoes; track $index) {
+          <div class="mb-2">
+            <div style="display: flex; gap: 8px;">
+              <input
+                nz-input
+                [formControl]="opcao"
+                placeholder="Opção {{ $index + 1 }}"
+                style="flex: 1;"
+              />
+              @if (opcoes.length > 3) {
+                <button
+                  nz-button
+                  nzType="default"
+                  nzShape="circle"
+                  (click)="removerOpcao($index)"
+                  type="button"
+                >
+                  <span nz-icon nzType="delete"></span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <button
+          nz-button
+          nzType="dashed"
+          class="mt-2"
+          (click)="adicionarOpcao()"
+          type="button"
+        >
+          <span nz-icon nzType="plus"></span> Adicionar opção
+        </button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Botão de envio -->
+  <button
+    nz-button
+    nzType="primary"
+    [disabled]="form.invalid"
+    htmlType="submit"
+  >
+    Criar Enquete
+  </button>
+</form>

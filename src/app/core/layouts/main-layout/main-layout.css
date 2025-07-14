@@ -1,0 +1,66 @@
+nz-header {
+    padding: 0;
+    width: 100%;
+    z-index: 2;
+}
+
+nz-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+nz-content {
+    flex: 1;
+    margin: 24px;
+    overflow: auto;
+  }
+
+::ng-deep .ant-dropdown-menu-item {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+.app-header {
+    position: relative;
+    height: 64px;
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px 0 0;
+
+    .header-title{
+        padding-left: 10px;
+    }
+
+    .user-dropdown {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .username {
+                color: #1890ff;
+                ;
+                font-weight: 500;
+            }
+        }
+    }
+}
