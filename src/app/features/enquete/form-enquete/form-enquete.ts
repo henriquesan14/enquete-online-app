@@ -9,6 +9,9 @@ import { EnqueteService } from '../../../shared/services/enquete.service';
 import { ToastrService } from 'ngx-toastr';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { Subject, takeUntil } from 'rxjs';
+import { passDateValidator } from '../../../shared/validators/pass-date.validator';
+import { todasOpcoesPreenchidasValidator } from '../../../shared/validators/opcoes-preenchidas.validator';
+
 
 @Component({
   selector: 'app-form-enquete',
@@ -27,12 +30,13 @@ export class FormEnquete implements OnDestroy {
     this.form = this.fb.group({
       titulo: ['', Validators.required],
       descricao: ['', Validators.required],
-      encerramento: ['', Validators.required],
+      encerramento: ['', [Validators.required, passDateValidator()]],
       opcoes: this.fb.array([
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required)
-      ])
+      ],
+      [todasOpcoesPreenchidasValidator])
     });
     if (this.data?.enqueteId) {
       this.getEnquete();
@@ -95,6 +99,10 @@ export class FormEnquete implements OnDestroy {
 
   get opcoes(): FormControl[] {
     return this.opcoesFormArray.controls as FormControl[];
+  }
+
+    get opcoesControl() {
+    return this.form.get('opcoes');
   }
 
   adicionarOpcao(): void {

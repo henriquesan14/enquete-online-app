@@ -74,4 +74,8 @@ export class CardEnquete {
       }
     });
   }
+
+  get podeEditar(): boolean {
+    return !this.enquete.opcoes?.some(o => o.quantidadeVotos > 0);
+  }
 }
