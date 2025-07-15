@@ -34,4 +34,8 @@ export class EnqueteService {
     deleteEnquete(id: string){
       return this.http.delete(`${this.API}/${id}`);
     }
+
+    updateEnquete(enquete: NewEnquete){
+      return this.http.put(`${this.API}`, enquete);
+    }
 }

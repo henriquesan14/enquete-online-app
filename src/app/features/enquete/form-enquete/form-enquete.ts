@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NewEnquete } from '../../../core/models/new-enquete.interface';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -7,7 +7,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { EnqueteService } from '../../../shared/services/enquete.service';
 import { ToastrService } from 'ngx-toastr';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-form-enquete',
@@ -15,12 +16,14 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   templateUrl: './form-enquete.html',
   styleUrl: './form-enquete.css'
 })
-export class FormEnquete {
+export class FormEnquete implements OnDestroy {
+  private destroy$ = new Subject<void>();
   form: FormGroup;
   enqueteService = inject(EnqueteService);
   toastr = inject(ToastrService);
 
-  constructor(private modalRef: NzModalRef, private fb: FormBuilder) {
+
+  constructor(private modalRef: NzModalRef, private fb: FormBuilder, @Inject(NZ_MODAL_DATA) public data: { enqueteId: string }) {
     this.form = this.fb.group({
       titulo: ['', Validators.required],
       descricao: ['', Validators.required],
@@ -31,14 +34,65 @@ export class FormEnquete {
         this.fb.control('', Validators.required)
       ])
     });
+    if (this.data?.enqueteId) {
+      this.getEnquete();
+    }
   }
 
-  // Acesso ao FormArray
+  getEnquete() {
+    this.enqueteService.getEnquete(this.data!.enqueteId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.form.patchValue({
+            titulo: res.titulo,
+            descricao: res.descricao,
+            encerramento: res.encerramento
+          });
+
+          this.opcoesFormArray.clear();
+          res.opcoes.forEach(opcao => {
+            this.opcoesFormArray.push(this.fb.control(opcao.descricao, Validators.required));
+          });
+        }
+      });
+  }
+
+  submit(): void {
+    if (this.form.valid) {
+      const enquete: NewEnquete = this.form.value;
+
+      if(this.data && this.data.enqueteId){
+        this.atualizarEnquete(enquete);
+      }else{
+        this.cadastrarEnquete(enquete);
+      }
+    }
+  }
+
+  atualizarEnquete(enquete: NewEnquete){
+    enquete.id = this.data.enqueteId;
+    this.enqueteService.updateEnquete(enquete).subscribe({
+        next: () => {
+          this.toastr.success('Enquete atualizada');
+          this.modalRef.close(true);
+        }
+    });
+  }
+
+  cadastrarEnquete(enquete: NewEnquete){
+    this.enqueteService.addEnquete(enquete).subscribe({
+        next: () => {
+          this.toastr.success('Enquete adicionada');
+          this.modalRef.close(true);
+        }
+    });
+  }
+
   get opcoesFormArray(): FormArray {
     return this.form.get('opcoes') as FormArray;
   }
 
-  // Para iterar no template com tipo certo
   get opcoes(): FormControl[] {
     return this.opcoesFormArray.controls as FormControl[];
   }
@@ -53,16 +107,8 @@ export class FormEnquete {
     }
   }
 
-  salvar(): void {
-    if (this.form.valid) {
-      const novaEnquete: NewEnquete = this.form.value;
-      
-      this.enqueteService.addEnquete(novaEnquete).subscribe({
-        next: () => {
-          this.toastr.success('Enquete adicionada');
-          this.modalRef.close(true);
-        }
-      })
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

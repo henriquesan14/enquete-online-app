@@ -21,8 +21,11 @@
             <button nz-button [nzType]="'primary'" class="me-1" (click)="visualizar()">
                 Acompanhar em tempo real
             </button>
-            <button [isOwner]="enquete.createdBy" class="mt-1" (click)="excluir()" nz-button [nzType]="'primary'" [nzDanger]="true" >
+            <button [isOwner]="enquete.createdBy" class="me-1" (click)="excluir()" nz-button [nzType]="'primary'" [nzDanger]="true" >
                 <i nz-tooltip="Excluir" nz-icon nzType="delete"></i>
+            </button>
+            <button [isOwner]="enquete.createdBy" (click)="editar()" nz-button [nzType]="'default'" >
+                <i nz-tooltip="Editar" nz-icon nzType="edit"></i>
             </button>
         </div>
     </nz-card>

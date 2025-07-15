@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="salvar()" nz-form [nzLayout]="'vertical'">
+<form [formGroup]="form" (ngSubmit)="submit()" nz-form [nzLayout]="'vertical'">
   <!-- Título -->
   <nz-form-item>
     <nz-form-label nzRequired>Título</nz-form-label>
@@ -77,6 +77,6 @@
     [disabled]="form.invalid"
     htmlType="submit"
   >
-    Criar Enquete
+    {{data && data.enqueteId ? 'Atualizar Enquete' : 'Criar Enquete'}}
   </button>
 </form>
