@@ -1,4 +1,4 @@
-import { Component, inject, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit, Optional, signal } from '@angular/core';
 import { Enquete } from '../../../core/models/enquete.interface';
 import { NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
 import { EnqueteService } from '../../../shared/services/enquete.service';
@@ -21,7 +21,7 @@ import { EnqueteSignalRService } from '../../../shared/services/enquete-signalr.
 export class VisualizarEnquete implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private signalRIniciado = false;
-  viewResultado = false;
+  viewResultado = signal(false);
 
   enquete!: Enquete;
   opcaoSelecionadaId: string | null = null;
@@ -58,13 +58,13 @@ export class VisualizarEnquete implements OnInit, OnDestroy {
     }).subscribe({
       next: () => {
         this.getEnquete();
-        this.viewResultado = true;
+        this.viewResultado.set(true);
       }
     });
   }
 
   votarNovamente(){
-    this.viewResultado = false;
+    this.viewResultado.set(false);
   }
 
   getEnquete() {
@@ -79,7 +79,7 @@ export class VisualizarEnquete implements OnInit, OnDestroy {
   }
 
   verResultado(){
-    this.viewResultado = true;
+    this.viewResultado.set(true);
   }
 
   ngOnDestroy(): void {

@@ -1,20 +1,22 @@
 <div class="container" style="display: flex; gap: 8px; align-items: center;">
   <input
     nz-input
-    [(ngModel)]="filtroTitulo"
+    [ngModel]="filtroTitulo()"
+    (ngModelChange)="atualizarFiltroTitulo($event)"
     placeholder="Buscar por título..."
     style="width: 250px;"
-    (keyup.enter)="getEnquetes({pageNumber: paginatedEnquete.pageNumber, pageSize: paginatedEnquete.pageSize, titulo: filtroTitulo})" />
+    (keyup.enter)="onBuscar()" />
 
-  <button (click)="getEnquetes({pageNumber: paginatedEnquete.pageNumber, pageSize: paginatedEnquete.pageSize, titulo: filtroTitulo})" nz-button [nzType]="'primary'">Buscar</button>
-  <button (click)="novaEnquete()" nz-button [nzType]="'default'">Nova enquete</button>
+  <button (click)="onBuscar()" nz-button nzType="primary">Buscar</button>
+  <button (click)="novaEnquete()" nz-button nzType="default">Nova enquete</button>
 </div>
-<div style="display: flex;  margin-top: 16px;">
+
+<div style="display: flex; margin-top: 16px;">
   <nz-pagination
     nzSize="small"
-    [nzTotal]="paginatedEnquete.count"
-    [nzPageSize]="paginatedEnquete.pageSize"
-    [(nzPageIndex)]="paginatedEnquete.pageNumber"
+    [nzTotal]="paginatedEnquete().count"
+    [nzPageSize]="paginatedEnquete().pageSize"
+    [nzPageIndex]="paginatedEnquete().pageNumber"
     (nzPageIndexChange)="onPageChange($event)"
     (nzPageSizeChange)="onPageSizeChange($event)"
     [nzShowSizeChanger]="true"
@@ -22,8 +24,12 @@
     style="max-width: 600px; width: 100%;">
   </nz-pagination>
 </div>
+
 <div class="enquetes-container">
-    @for (enquete of paginatedEnquete.data; track enquete.id) {
-        <card-enquete (closeModal)="getEnquetes({pageNumber: paginatedEnquete.pageNumber, pageSize: paginatedEnquete.pageSize})" [enquete]="enquete"></card-enquete>
-    }
+  @for (enquete of paginatedEnquete().data; track enquete.id) {
+    <card-enquete
+      [enquete]="enquete"
+      (closeModal)="onBuscar()">
+    </card-enquete>
+  }
 </div>

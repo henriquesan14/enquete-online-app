@@ -1,16 +1,15 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Enquete } from '../../../core/models/enquete.interface';
+import { Component, computed, inject, signal } from '@angular/core';
 import { EnqueteService } from '../../../shared/services/enquete.service';
 import { CardEnquete } from '../card-enquete/card-enquete';
-import { Subject, takeUntil } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { FormEnquete } from '../form-enquete/form-enquete';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
-import { PaginatedResult } from '../../../core/models/paginated-result.interface';
 import { FormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-listagem-enquetes',
@@ -18,28 +17,31 @@ import { NzInputModule } from 'ng-zorro-antd/input';
   templateUrl: './listagem-enquetes.html',
   styleUrl: './listagem-enquetes.css'
 })
-export class ListagemEnquetes implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  paginatedEnquete: PaginatedResult<Enquete> = <PaginatedResult<Enquete>>{};;
-  enqueteService = inject(EnqueteService);
-  modalService = inject(NzModalService);
-  filtroTitulo!: string;
+export class ListagemEnquetes {
+  private enqueteService = inject(EnqueteService);
+  private modalService = inject(NzModalService);
 
-  ngOnInit(): void {
-    this.getEnquetes(null);
-  }
+  // Signals de filtro e paginação
+  filtroTitulo = signal('');
+  pageNumber = signal(1);
+  pageSize = signal(10);
 
-  getEnquetes(params: any){
-    this.enqueteService.getEnquetes(params)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res) => {
-        this.paginatedEnquete = res;
-      }
-    })
-  }
+  // Signal de parâmetros para consulta
+  private params = computed(() => ({
+    pageNumber: this.pageNumber(),
+    pageSize: this.pageSize(),
+    titulo: this.filtroTitulo()
+  }));
 
-  novaEnquete(){
+  // Signal da API (com toSignal)
+  paginatedEnquete = toSignal(
+    toObservable(this.params).pipe(
+      switchMap(p => this.enqueteService.getEnquetes(p))
+    ),
+    { initialValue: { data: [], pageNumber: 1, pageSize: 10, count: 0 } }
+  );
+
+  novaEnquete() {
     const modal = this.modalService.create({
       nzTitle: `Nova enquete`,
       nzContent: FormEnquete,
@@ -47,34 +49,31 @@ export class ListagemEnquetes implements OnInit, OnDestroy {
       nzFooter: null
     });
 
-    modal.afterClose.subscribe((result) => {
-        if (result) {
-          this.getEnquetes(null);
-        }
-      });
-  }
-
-  onPageChange(event: number){
-      const params = {
-        pageNumber: event,
-        pageSize: this.paginatedEnquete.pageSize,
-        titulo: this.filtroTitulo
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        // Dispara nova chamada apenas trocando a página (força recomputação)
+        this.pageNumber.update(v => v); // trigger re-fetch
       }
-      this.getEnquetes(params);
+    });
   }
 
-  onPageSizeChange(event: number){
-    const params = {
-        pageNumber: this.paginatedEnquete.pageNumber,
-        pageSize: event,
-        titulo: this.filtroTitulo
-      }
-      this.getEnquetes(params);
+  onBuscar() {
+    // Atualiza página para 1 e força revalidação dos params
+    this.pageNumber.set(1);
+    this.pageNumber.update(v => v); // dispara nova busca
   }
 
-  ngOnDestroy(): void {
-      this.destroy$.next();
-      this.destroy$.complete();
+  onPageChange(page: number) {
+    this.pageNumber.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+  }
+
+  atualizarFiltroTitulo(titulo: string) {
+    this.filtroTitulo.set(titulo);
+    this.pageNumber.set(1); // Reinicia na primeira página ao filtrar
   }
 
 }
