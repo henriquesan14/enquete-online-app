@@ -1,59 +1,59 @@
-# EnqueteOnlineApp
+﻿## APP Angular EnqueteOnline
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+### Features
 
-## Development server
+- [x] Autenticação e Autorização com JWT com HTTP-only cookies
+- [x] Refresh tokens com 1 semana de expiração e job com hangfire para limpar tokens revogados/expirados 
+- [x] Login Google ou Facebook
+- [x] Cadastro de Enquetes
+- [x] Votar nas enquetes
+- [x] Acompanhar votação da enquete em tempo real(Websocket com SignalR)
+- [x] Editar/Excluir enquete apenas se for o criador da enquete 
 
-To start a local development server, run:
 
-```bash
-ng serve
-```
+### 🛠 Tecnologias
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+As seguintes ferramentas foram usadas na construção do projeto:
+- [Angular](https://angular.dev/)
+- [NgZorro](https://ng.ant.design/docs/introduce/en)
+- SignalR
 
-## Code scaffolding
+### Pré-requisitos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [NodeJs](https://nodejs.org/pt).
+[Angular CLI](https://angular.dev/tools/cli).
+Também é preciso criar e configurar o arquivo environment.development.ts com base no environment.ts no diretório `enquete-online-app/src/environments`.
+Além disto é bom ter um editor para trabalhar com o código como [Visual Studio Code](https://code.visualstudio.com/).
 
-```bash
-ng generate component component-name
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### 🎲 Rodando o Front End (Aplicativo web)
 
 ```bash
-ng test
+# Clone este repositório
+$ git clone <https://github.com/henriquesan14/enquete-online-app.git>
+
+# Acesse a pasta do projeto no terminal/cmd
+$ cd enquete-online-app
+
+# Instale as dependências do projeto
+$ npm install
+
+# Execute a aplicação com o comando do angular cli
+$ ng serve
+
+# O aplicativo iniciará na porta:4200 com HTTP
 ```
 
-## Running end-to-end tests
+### Autor
+---
 
-For end-to-end (e2e) testing, run:
+<a href="https://www.linkedin.com/in/henrique-san/">
+ <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/33522361?v=4" width="100px;" alt=""/>
+ <br />
+ <sub><b>Henrique Santos</b></sub></a> <a href="https://www.linkedin.com/in/henrique-san/">🚀</a>
 
-```bash
-ng e2e
-```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Feito com ❤️ por Henrique Santos 👋🏽 Entre em contato!
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+[![Linkedin Badge](https://img.shields.io/badge/-Henrique-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/henrique-san/)](https://www.linkedin.com/in/henrique-san/) 

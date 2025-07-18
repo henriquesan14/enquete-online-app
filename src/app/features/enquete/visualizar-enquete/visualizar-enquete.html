@@ -1,6 +1,6 @@
 @if (enquete) {
   <nz-card [nzBordered]="true">
-    @if (viewResultado) {
+    @if (viewResultado()) {
       @for (opcao of enquete.opcoes; track opcao.id) {
         <div class="voto-opcao">
           <div class="opcao-info">
