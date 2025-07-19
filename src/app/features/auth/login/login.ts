@@ -1,9 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { NonNullableFormBuilder } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { Router } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { environment } from '../../../../environments/environment';
 
@@ -14,8 +12,6 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './login.css'
 })
 export class Login {
-  private fb = inject(NonNullableFormBuilder);
-  private router = inject(Router);
 
   loading = false;
 
