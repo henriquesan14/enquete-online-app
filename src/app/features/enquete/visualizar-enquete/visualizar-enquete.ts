@@ -58,13 +58,9 @@ export class VisualizarEnquete implements OnInit, OnDestroy {
     }).subscribe({
       next: () => {
         this.getEnquete();
-        this.viewResultado.set(true);
+        this.toggleViewResultado();
       }
     });
-  }
-
-  votarNovamente(){
-    this.viewResultado.set(false);
   }
 
   getEnquete() {
@@ -78,8 +74,8 @@ export class VisualizarEnquete implements OnInit, OnDestroy {
       });
   }
 
-  verResultado(){
-    this.viewResultado.set(true);
+  toggleViewResultado() {
+    this.viewResultado.set(!this.viewResultado());
   }
 
   ngOnDestroy(): void {

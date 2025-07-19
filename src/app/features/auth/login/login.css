@@ -23,6 +23,10 @@
   margin-bottom: 20px;
 }
 
+.login-header img{
+  width: 100px;
+}
+
 .lol-icon {
   width: 60px;
   height: auto;
