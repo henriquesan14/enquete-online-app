@@ -25,12 +25,14 @@ export class ListagemEnquetes {
   filtroTitulo = signal('');
   pageNumber = signal(1);
   pageSize = signal(10);
+  refresh = signal(0);
 
   // Signal de parâmetros para consulta
   private params = computed(() => ({
     pageNumber: this.pageNumber(),
     pageSize: this.pageSize(),
-    titulo: this.filtroTitulo()
+    titulo: this.filtroTitulo(),
+    refresh: this.refresh()
   }));
 
   // Signal da API (com toSignal)
@@ -51,16 +53,13 @@ export class ListagemEnquetes {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        // Dispara nova chamada apenas trocando a página (força recomputação)
-        this.pageNumber.update(v => v); // trigger re-fetch
+        this.refresh.update(v => v + 1);
       }
     });
   }
 
   onBuscar() {
-    // Atualiza página para 1 e força revalidação dos params
-    this.pageNumber.set(1);
-    this.pageNumber.update(v => v); // dispara nova busca
+    this.refresh.update(v => v + 1);
   }
 
   onPageChange(page: number) {
@@ -73,7 +72,7 @@ export class ListagemEnquetes {
 
   atualizarFiltroTitulo(titulo: string) {
     this.filtroTitulo.set(titulo);
-    this.pageNumber.set(1); // Reinicia na primeira página ao filtrar
+    this.pageNumber.set(1);
   }
 
 }
