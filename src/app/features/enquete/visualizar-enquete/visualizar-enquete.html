@@ -13,8 +13,8 @@
         <button
           nz-button
           nzType="primary"
-          [disabled]="!opcaoSelecionadaId"
-          (click)="votarNovamente()"
+          [disabled]="!opcaoSelecionadaId && !viewResultado"
+          (click)="toggleViewResultado()"
         >
           Votar novamente
         </button>
@@ -41,7 +41,7 @@
         <button
           nz-button
           nzType="default"
-          (click)="verResultado()"
+          (click)="toggleViewResultado()"
         >
           Ver resultado
         </button>
