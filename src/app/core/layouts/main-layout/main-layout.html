@@ -1,11 +1,9 @@
 <nz-layout>
       <nz-header>
         <div class="app-header">
-
-          
           <div class="header-title">
             <h3>
-              Enquetes Online
+              e-Enquetes
             </h3>
           </div>
 
@@ -19,10 +17,6 @@
       
           <nz-dropdown-menu #userMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="goToProfile()">
-                <i nz-icon nzType="setting" class="me-1"></i>
-                Atualizar perfil
-              </li>
               <li nz-menu-item (click)="logout()" [nzDisabled]="isLoggingOut">
                 @if(!isLoggingOut){
                   <i nz-icon nzType="logout" class="me-1"></i>
