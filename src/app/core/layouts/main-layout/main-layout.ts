@@ -31,7 +31,7 @@ export class MainLayout {
     this.isLoggingOut = true;
     this.authService.logout().subscribe({
       next: () => {
-        this.localStorageService.removeUsertorage();
+        this.localStorageService.removeAuthStorage();
         this.router.navigateByUrl('/login');
         this.isLoggingOut = false;
       }
@@ -48,6 +48,6 @@ export class MainLayout {
     if(response && response.avatarUrl){
       return response.avatarUrl;
     }
-    return '/images/icon-lol.png';
+    return '/images/icon-enquete.png';
   }
 }

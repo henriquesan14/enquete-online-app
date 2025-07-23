@@ -17,7 +17,7 @@ export class ErrorHandlerService {
       return;
     }
     if (res.status == 401 && auth) {
-      this.localStorageService.removeUsertorage();
+      this.localStorageService.removeAuthStorage();
       return;
     }
     if (res.error.errors) {

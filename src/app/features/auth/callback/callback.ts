@@ -21,9 +21,9 @@ export class Callback {
 
     if (base64Data) {
       const json = atob(base64Data);
-      const userResponse = JSON.parse(json);
+      const authResponse = JSON.parse(json);
 
-      this.localStorageService.setUserStorage(userResponse);
+      this.localStorageService.setAuthStorage(authResponse);
 
       this.router.navigate(['/enquetes']);
     } else {

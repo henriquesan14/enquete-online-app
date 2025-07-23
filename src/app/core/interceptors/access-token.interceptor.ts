@@ -11,25 +11,32 @@ export const AccessTokenInterceptor = (req: HttpRequest<unknown>, next: HttpHand
   const localStorageService = inject(LocalstorageService);
   const authService = inject(AuthService);
   const router = inject(Router);
-  const localUser = localStorageService.getUserStorage();
+  const accessToken = localStorageService.getAccessTokenStorage();
 
   const requestToAPI = req.url.startsWith(environment.apiUrl);
 
   const authReq = requestToAPI
-    ? req.clone({ withCredentials: true })
+    ? req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${accessToken}`)
+    })
     : req;
 
   const handle401 = (error: HttpErrorResponse) => {
-    if (error.status === 401 && localUser && !isRefreshing) {
+    if (error.status === 401 && accessToken && !isRefreshing) {
       isRefreshing = true;
 
       return authService.refreshToken().pipe(
         switchMap((auth) => {
-          localStorageService.setUserStorage(auth);
-          return next(authReq);
+          localStorageService.setAuthStorage(auth);
+
+          const updatedReq = req.clone({
+            headers: req.headers.set('Authorization', `Bearer ${auth.accessToken}`)
+          });
+
+          return next(updatedReq);
         }),
         catchError((refreshErr) => {
-          localStorageService.removeUsertorage();
+          localStorageService.removeAuthStorage();
           router.navigateByUrl('/');
           return throwError(() => refreshErr);
         }),
