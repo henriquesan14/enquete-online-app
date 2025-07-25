@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
+import { LocalstorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,13 @@ export class EnqueteSignalRService {
   private hubConnection!: signalR.HubConnection;
   private resultadoSubject = new BehaviorSubject<any>(null);
   resultado$ = this.resultadoSubject.asObservable();
+  storageService = inject(LocalstorageService);
 
   constructor() {}
 
   startConnection(enqueteId: string): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.urlHub}/hubs/enquete`)
+      .withUrl(`${environment.urlHub}/hubs/enquete`, {accessTokenFactory: () => this.storageService.getAccessTokenStorage()!})
       .withAutomaticReconnect()
       .build();
 
