@@ -18,7 +18,7 @@ export class EnqueteSignalRService {
 
   startConnection(enqueteId: string): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.urlHub}/hubs/enquete`, {accessTokenFactory: () => `Bearer ${this.storageService.getAccessTokenStorage()!}`})
+      .withUrl(`${environment.urlHub}/hubs/enquete`, {accessTokenFactory: () => `${this.storageService.getAccessTokenStorage()!}`})
       .withAutomaticReconnect()
       .build();
 
