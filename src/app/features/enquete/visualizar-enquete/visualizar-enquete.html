@@ -3,10 +3,11 @@
     @if (viewResultado()) {
       @for (opcao of enquete.opcoes; track opcao.id) {
         <div class="voto-opcao">
-          <div class="opcao-info">
-            <span>{{ opcao.quantidadeVotos }} votos ({{ opcao.porcentagem }}%)</span>
-          </div>
-          <nz-progress [nzPercent]="opcao.porcentagem" [nzStrokeColor]="'#1890ff'"></nz-progress>
+            <div class="opcao-info">
+                <strong>{{ opcao.descricao }}</strong>
+                <span>{{ opcao.quantidadeVotos }} votos</span>
+            </div>
+            <nz-progress [nzPercent]="opcao.porcentagem" [nzStrokeColor]="'#1890ff'"></nz-progress>
         </div>
       }
       <div class="botao-votar mt-3">
